@@ -1,6 +1,6 @@
 /* Vichaar service worker – makes the app open instantly and work offline.
    Bump VERSION when you deploy if you want every device to refresh immediately. */
-const VERSION = 'vichaar-1.2.2';
+const VERSION = 'vichaar-1.2.3';
 const SHELL = [
   './', './index.html', './styles.css', './app.js', './manifest.webmanifest',
   './icons/icon.svg', './icons/icon-192.png', './icons/icon-512.png', './icons/apple-touch-icon.png',

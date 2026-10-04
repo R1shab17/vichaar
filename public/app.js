@@ -1,7 +1,7 @@
 /* Vichaar — speak a thought, keep it forever.
    Single-file app logic. No build step, no dependencies. */
 
-const VERSION = '1.2.2';
+const VERSION = '1.2.3';
 const MAX_SECONDS = 300; // 5 minutes per thought
 
 /* ───────────── helpers ───────────── */
@@ -439,11 +439,23 @@ function onThoughtDone(t) {
   if (S.view !== 'journal') $('#journal-badge').hidden = false;
   if (S.view === 'book') renderBook();
   const isFresh = S.fresh.delete(t.id);
-  if (isFresh && !document.hidden && !openSheetId && Rec.state === 'idle' && t.reflection?.is_thought !== false && $('#reveal').hidden) {
-    showReveal(t);
-  } else {
-    glowCard(t.id);
-  }
+  if (!isFresh || t.reflection?.is_thought === false) { glowCard(t.id); return; }
+  if (canReveal()) showReveal(t);
+  else { pendingReveal = t.id; glowCard(t.id); } // shown the moment the person is back
+}
+
+/* A Revelation never gets lost: if a thought finishes while the app is in the background,
+   a sheet is open or a new recording is running, it plays as soon as the screen is free. */
+let pendingReveal = null;
+const canReveal = () => !document.hidden && !openSheetId && Rec.state === 'idle' && $('#reveal').hidden;
+function flushReveal(delay = 500) {
+  if (!pendingReveal) return;
+  setTimeout(() => {
+    if (!pendingReveal || !canReveal()) return;
+    const t = findThought(pendingReveal);
+    pendingReveal = null;
+    if (t?.reflection) showReveal(t);
+  }, delay);
 }
 
 function glowCard(id) {
@@ -715,6 +727,7 @@ function resetRecordUI() {
   $('#btn-discard').hidden = true;
   $('#btn-write').hidden = false;
   $('#orb').setAttribute('aria-label', 'Start recording');
+  flushReveal(900);
 }
 
 async function finishRecording() {
@@ -1058,6 +1071,7 @@ function initials(name) {
 function openDetail(id) {
   const t = findThought(id);
   if (!t) return;
+  if (pendingReveal === id) pendingReveal = null;
   S.detailId = id;
   stopPlayer();
   renderDetail(t);
@@ -1651,7 +1665,7 @@ function closeSheet(fromPop = false, instant = false) {
   scrim.classList.remove('show');
   document.body.classList.remove('locked');
   if (id === 'sheet-detail') { stopPlayer(); S.detailId = null; }
-  const hide = () => { if (openSheetId !== id) { el.hidden = true; if (!openSheetId) scrim.hidden = true; } };
+  const hide = () => { if (openSheetId !== id) { el.hidden = true; if (!openSheetId) scrim.hidden = true; } flushReveal(150); };
   if (instant) hide(); else setTimeout(hide, 450);
 }
 
@@ -1846,6 +1860,7 @@ function bindEvents() {
       if (S.view === 'speak') startLoop();
       renderGreeting();
       processQueue();
+      flushReveal(700);
     }
   });
   window.addEventListener('resize', moveIndicator);
@@ -1867,6 +1882,7 @@ async function boot() {
   // Anything interrupted mid-processing goes back in the queue
   for (const t of S.thoughts) if (['transcribing', 'reflecting', 'indexing'].includes(t.status)) t.status = 'queued';
 
+  if (history.state?.sheet) history.replaceState(null, '');
   bindEvents();
   Motes.init();
   renderGreeting();
