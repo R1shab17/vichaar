@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Vichaar — Your Book of Thoughts</title>
+  <meta name="description" content="Speak a thought in any language. Keep it forever, see who said it before you, and grow your own book of wisdom.">
+  <meta name="theme-color" content="#0d0b14">
+  <meta name="color-scheme" content="dark">
+
+  <!-- Installable app (iOS + Android) -->
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Vichaar">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="format-detection" content="telephone=no">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+  <link rel="apple-touch-startup-image" media="screen and (device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="splash/splash-375x667@2x.png">
+  <link rel="apple-touch-startup-image" media="screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="splash/splash-414x896@2x.png">
+  <link rel="apple-touch-startup-image" media="screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="splash/splash-375x812@3x.png">
+  <link rel="apple-touch-startup-image" media="screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="splash/splash-414x896@3x.png">
+  <link rel="apple-touch-startup-image" media="screen and (device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="splash/splash-390x844@3x.png">
+  <link rel="apple-touch-startup-image" media="screen and (device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="splash/splash-428x926@3x.png">
+  <link rel="apple-touch-startup-image" media="screen and (device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="splash/splash-393x852@3x.png">
+  <link rel="apple-touch-startup-image" media="screen and (device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="splash/splash-430x932@3x.png">
+  <link rel="apple-touch-startup-image" media="screen and (device-width: 402px) and (device-height: 874px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="splash/splash-402x874@3x.png">
+  <link rel="apple-touch-startup-image" media="screen and (device-width: 440px) and (device-height: 956px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="splash/splash-440x956@3x.png">
+  <link rel="apple-touch-startup-image" media="screen and (device-width: 360px) and (device-height: 780px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="splash/splash-360x780@3x.png">
+
+  <link rel="preload" href="fonts/cg-500.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/inter-400.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="aurora" aria-hidden="true"><i></i><i></i><i></i></div>
+  <canvas id="motes" class="motes" aria-hidden="true"></canvas>
+
+  <div id="app">
+    <header class="topbar">
+      <div class="brand">
+        <img src="icons/icon.svg" alt="" width="28" height="28">
+        <span>Vichaar</span>
+      </div>
+      <div class="topbar-right">
+        <span id="net-pill" class="net-pill" hidden>Offline · saving locally</span>
+        <button id="btn-settings" class="icon-btn" aria-label="Settings">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h0a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h0a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v0a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <main id="views">
+      <!-- SPEAK -->
+      <section class="view view-speak" id="view-speak" data-view="speak">
+        <div class="speak-hero">
+          <p class="greet" id="greet">&nbsp;</p>
+          <h1 class="prompt" id="prompt">What’s on your mind?</h1>
+        </div>
+
+        <div class="orb-stage" id="orb-stage">
+          <div class="halo" aria-hidden="true">
+            <div class="rays"></div>
+            <svg class="mandala" viewBox="0 0 300 300">
+              <g class="m-outer" fill="none" stroke="currentColor">
+                <circle cx="150" cy="150" r="147" stroke-width=".9" stroke-dasharray="1 5" opacity=".55"/>
+                <circle cx="150" cy="150" r="139" stroke-width=".5" opacity=".3"/>
+              </g>
+              <g class="m-petals" fill="none" stroke="currentColor" stroke-width=".7" opacity=".5">
+              <path d="M150 22C163 46 163 72 150 96C137 72 137 46 150 22Z" transform="rotate(0.0 150 150)"/>
+              <path d="M150 22C163 46 163 72 150 96C137 72 137 46 150 22Z" transform="rotate(22.5 150 150)"/>
+              <path d="M150 22C163 46 163 72 150 96C137 72 137 46 150 22Z" transform="rotate(45.0 150 150)"/>
+              <path d="M150 22C163 46 163 72 150 96C137 72 137 46 150 22Z" transform="rotate(67.5 150 150)"/>
+              <path d="M150 22C163 46 163 72 150 96C137 72 137 46 150 22Z" transform="rotate(90.0 150 150)"/>
+              <path d="M150 22C163 46 163 72 150 96C137 72 137 46 150 22Z" transform="rotate(112.5 150 150)"/>
+              <path d="M150 22C163 46 163 72 150 96C137 72 137 46 150 22Z" transform="rotate(135.0 150 150)"/>
+              <path d="M150 22C163 46 163 72 150 96C137 72 137 46 150 22Z" transform="rotate(157.5 150 150)"/>
+              <path d="M150 22C163 46 163 72 150 96C137 72 137 46 150 22Z" transform="rotate(180.0 150 150)"/>
+              <path d="M150 22C163 46 163 72 150 96C137 72 137 46 150 22Z" transform="rotate(202.5 150 150)"/>
+              <path d="M150 22C163 46 163 72 150 96C137 72 137 46 150 22Z" transform="rotate(225.0 150 150)"/>
+              <path d="M150 22C163 46 163 72 150 96C137 72 137 46 150 22Z" transform="rotate(247.5 150 150)"/>
+              <path d="M150 22C163 46 163 72 150 96C137 72 137 46 150 22Z" transform="rotate(270.0 150 150)"/>
+              <path d="M150 22C163 46 163 72 150 96C137 72 137 46 150 22Z" transform="rotate(292.5 150 150)"/>
+              <path d="M150 22C163 46 163 72 150 96C137 72 137 46 150 22Z" transform="rotate(315.0 150 150)"/>
+              <path d="M150 22C163 46 163 72 150 96C137 72 137 46 150 22Z" transform="rotate(337.5 150 150)"/>
+              </g>
+              <g class="m-petals2" fill="none" stroke="currentColor" stroke-width=".6" opacity=".35">
+              <path d="M150 40C158 56 158 72 150 88C142 72 142 56 150 40Z" transform="rotate(11.25 150 150)"/>
+              <path d="M150 40C158 56 158 72 150 88C142 72 142 56 150 40Z" transform="rotate(33.75 150 150)"/>
+              <path d="M150 40C158 56 158 72 150 88C142 72 142 56 150 40Z" transform="rotate(56.25 150 150)"/>
+              <path d="M150 40C158 56 158 72 150 88C142 72 142 56 150 40Z" transform="rotate(78.75 150 150)"/>
+              <path d="M150 40C158 56 158 72 150 88C142 72 142 56 150 40Z" transform="rotate(101.25 150 150)"/>
+              <path d="M150 40C158 56 158 72 150 88C142 72 142 56 150 40Z" transform="rotate(123.75 150 150)"/>
+              <path d="M150 40C158 56 158 72 150 88C142 72 142 56 150 40Z" transform="rotate(146.25 150 150)"/>
+              <path d="M150 40C158 56 158 72 150 88C142 72 142 56 150 40Z" transform="rotate(168.75 150 150)"/>
+              <path d="M150 40C158 56 158 72 150 88C142 72 142 56 150 40Z" transform="rotate(191.25 150 150)"/>
+              <path d="M150 40C158 56 158 72 150 88C142 72 142 56 150 40Z" transform="rotate(213.75 150 150)"/>
+              <path d="M150 40C158 56 158 72 150 88C142 72 142 56 150 40Z" transform="rotate(236.25 150 150)"/>
+              <path d="M150 40C158 56 158 72 150 88C142 72 142 56 150 40Z" transform="rotate(258.75 150 150)"/>
+              <path d="M150 40C158 56 158 72 150 88C142 72 142 56 150 40Z" transform="rotate(281.25 150 150)"/>
+              <path d="M150 40C158 56 158 72 150 88C142 72 142 56 150 40Z" transform="rotate(303.75 150 150)"/>
+              <path d="M150 40C158 56 158 72 150 88C142 72 142 56 150 40Z" transform="rotate(326.25 150 150)"/>
+              <path d="M150 40C158 56 158 72 150 88C142 72 142 56 150 40Z" transform="rotate(348.75 150 150)"/>
+              </g>
+            </svg>
+          </div>
+          <canvas id="wave" class="wave" aria-hidden="true"></canvas>
+          <div class="orb-ring" aria-hidden="true"></div>
+          <button id="orb" class="orb" aria-label="Start recording">
+            <span class="orb-body"></span>
+            <svg class="orb-icon mic" viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
+            <svg class="orb-icon stop" viewBox="0 0 24 24" width="30" height="30"><rect x="6.5" y="6.5" width="11" height="11" rx="3" fill="currentColor"/></svg>
+          </button>
+        </div>
+
+        <div class="rec-status">
+          <span id="rec-label">Tap and speak — in any language</span>
+          <span id="rec-time" class="rec-time" hidden>0:00</span>
+        </div>
+        <div class="rec-actions">
+          <button id="btn-discard" class="ghost-btn" hidden>Discard</button>
+          <button id="btn-write" class="ghost-btn">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>
+            Write instead
+          </button>
+        </div>
+
+        <div id="latest-wrap" class="latest-wrap"></div>
+        <div id="resurface" class="resurface"></div>
+      </section>
+
+      <!-- JOURNAL -->
+      <section class="view" id="view-journal" data-view="journal" hidden>
+        <div class="view-head">
+          <h2>Journal</h2>
+          <span class="view-sub" id="journal-count"></span>
+        </div>
+        <div class="chips" id="journal-chips"></div>
+        <div id="journal-list" class="journal-list"></div>
+      </section>
+
+      <!-- SEARCH -->
+      <section class="view" id="view-search" data-view="search" hidden>
+        <div class="view-head">
+          <h2>Ask your past self</h2>
+        </div>
+        <form id="search-form" class="search-box" autocomplete="off" role="search">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input id="search-input" type="search" enterkeyhint="search" placeholder="What have I said about…" aria-label="Search your thoughts">
+          <button type="submit" class="ask-btn">Ask</button>
+        </form>
+        <div class="chips chips-suggest" id="search-suggest"></div>
+        <p class="search-hint" id="search-hint"></p>
+        <div id="search-answer"></div>
+        <div id="search-results" class="journal-list"></div>
+      </section>
+
+      <!-- BOOK -->
+      <section class="view" id="view-book" data-view="book" hidden>
+        <div id="book-root"></div>
+      </section>
+    </main>
+
+    <nav class="tabbar" id="tabbar" aria-label="Main">
+      <span class="tab-ind" id="tab-ind" aria-hidden="true"></span>
+      <button class="tab active" data-tab="speak" aria-label="Speak">
+        <svg viewBox="0 0 24 24" width="23" height="23" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
+        <span>Speak</span>
+      </button>
+      <button class="tab" data-tab="journal" aria-label="Journal">
+        <svg viewBox="0 0 24 24" width="23" height="23" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 20.5A2.5 2.5 0 0 0 6.5 23H20v-5M9 8h7M9 11.5h5"/></svg>
+        <span>Journal</span><i class="tab-badge" id="journal-badge" hidden></i>
+      </button>
+      <button class="tab" data-tab="search" aria-label="Search">
+        <svg viewBox="0 0 24 24" width="23" height="23" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <span>Search</span>
+      </button>
+      <button class="tab" data-tab="book" aria-label="Book">
+        <svg viewBox="0 0 24 24" width="23" height="23" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.5C10 4.8 7.3 4 3 4v14c4.3 0 7 .8 9 2.5 2-1.7 4.7-2.5 9-2.5V4c-4.3 0-7 .8-9 2.5z"/><path d="M12 6.5v14"/></svg>
+        <span>Book</span>
+      </button>
+    </nav>
+  </div>
+
+  <!-- Sheets -->
+  <div class="scrim" id="scrim" hidden></div>
+
+  <section class="sheet" id="sheet-detail" role="dialog" aria-modal="true" aria-label="Thought" hidden>
+    <div class="sheet-grab" data-drag></div>
+    <button class="icon-btn sheet-x" data-close aria-label="Close">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+    <div class="sheet-body" id="detail-body"></div>
+  </section>
+
+  <section class="sheet" id="sheet-settings" role="dialog" aria-modal="true" aria-label="Settings" hidden>
+    <div class="sheet-grab" data-drag></div>
+    <div class="sheet-head" data-drag>
+      <h3>Settings</h3>
+      <button class="icon-btn" data-close aria-label="Close">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+    </div>
+    <div class="sheet-body">
+      <form id="settings-form" class="form" onsubmit="return false">
+        <label class="field"><span>Your name, as your book will quote you</span><input name="author" autocomplete="name" placeholder="Your full name"></label>
+        <label class="field"><span>Book title</span><input name="bookTitle" placeholder="Leave empty and Vichaar will suggest one"></label>
+        <label class="field"><span>I usually speak</span><select name="speakLang" data-options="speak"></select></label>
+        <label class="field"><span>Translate my thoughts into</span><select name="targetLang" data-options="target"></select></label>
+        <label class="toggle"><input type="checkbox" name="chime"><span class="toggle-ui"></span><span>Play a soft chime when a thought is distilled</span></label>
+        <label class="field"><span>Access code <em>— only if your server asks for one</em></span><input name="accessCode" type="password" autocomplete="off" placeholder="Optional"></label>
+      </form>
+
+      <div class="row-group">
+        <button class="row-btn" id="btn-install">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M12 7v7M9 11l3 3 3-3"/></svg>
+          <span>Add to Home Screen</span>
+        </button>
+        <button class="row-btn" id="btn-export">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>
+          <span>Export backup</span>
+        </button>
+        <label class="row-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3M7 8l5-5 5 5M5 21h14"/></svg>
+          <span>Import backup</span>
+          <input type="file" id="import-file" accept="application/json,.json" hidden>
+        </label>
+        <button class="row-btn danger" id="btn-wipe">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>
+          <span>Delete everything on this device</span>
+        </button>
+      </div>
+      <p class="server-status" id="server-status"></p>
+      <p class="fine">Your thoughts are stored privately on this device. Recordings go to the server only to be transcribed and are not kept there. Export a backup now and then.</p>
+      <p class="fine" id="version-line"></p>
+    </div>
+  </section>
+
+  <section class="sheet sheet-compact" id="sheet-write" role="dialog" aria-modal="true" aria-label="Write a thought" hidden>
+    <div class="sheet-grab" data-drag></div>
+    <div class="sheet-head" data-drag>
+      <h3>Write a thought</h3>
+      <button class="icon-btn" data-close aria-label="Close">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+    </div>
+    <div class="sheet-body">
+      <form id="write-form" class="form">
+        <textarea name="text" rows="6" placeholder="Write it the way you’d say it — any language." required></textarea>
+        <button class="primary-btn" type="submit">Keep this thought</button>
+      </form>
+    </div>
+  </section>
+
+  <section class="sheet sheet-compact" id="sheet-install" role="dialog" aria-modal="true" aria-label="Install" hidden>
+    <div class="sheet-grab" data-drag></div>
+    <div class="sheet-body install">
+      <img src="icons/apple-touch-icon.png" class="install-icon" alt="" width="72" height="72">
+      <h3>Keep Vichaar on your Home Screen</h3>
+      <p>It opens full-screen like a real app and is one tap away when a thought arrives.</p>
+      <ol class="install-steps" id="install-steps"></ol>
+      <button class="primary-btn" id="install-go" hidden>Install Vichaar</button>
+      <button class="ghost-btn" data-close>Not now</button>
+    </div>
+  </section>
+
+  <!-- First run -->
+  <div id="onboarding" class="onboarding" hidden>
+    <div class="ob-inner">
+      <div class="ob-orb" aria-hidden="true"><span class="orb-body"></span></div>
+      <h1 class="ob-title">Vichaar</h1>
+      <p class="ob-tag">Every thought worth having is worth keeping.</p>
+      <ul class="ob-points">
+        <li><b>Speak</b> in any language — Hindi, English, or both at once.</li>
+        <li><b>Discover</b> which great thinkers came close, and what is yours alone.</li>
+        <li><b>Grow</b> your own book of wisdom, verse by verse.</li>
+      </ul>
+      <form id="ob-form" class="form">
+        <label class="field"><span>Your name, as your book will quote you</span><input name="author" required autocomplete="name" placeholder="e.g. Rishab Choudhary"></label>
+        <label class="field"><span>I usually speak</span><select name="speakLang" data-options="speak"></select></label>
+        <button class="primary-btn" type="submit">Begin</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- The moment a thought becomes a sutra -->
+  <div id="reveal" class="reveal" hidden role="dialog" aria-modal="true" aria-label="Your thought, distilled">
+    <div class="reveal-bloom"></div>
+    <div class="reveal-rays"></div>
+    <div class="reveal-sparks" id="reveal-sparks"></div>
+    <div class="reveal-inner">
+      <div class="reveal-kicker">A thought, distilled</div>
+      <p class="reveal-sutra" id="reveal-sutra"></p>
+      <p class="reveal-orig" id="reveal-orig"></p>
+      <p class="reveal-sign" id="reveal-sign"></p>
+      <div class="reveal-minds" id="reveal-minds"></div>
+      <p class="reveal-head" id="reveal-head"></p>
+      <div class="reveal-actions">
+        <button class="primary-btn" data-reveal="minds">Meet your parallel minds</button>
+        <button class="ghost-btn" data-reveal="close">Keep it</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toasts" class="toasts" aria-live="polite"></div>
+  <div id="print-root" class="print-root" aria-hidden="true"></div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Vichaar — film</title>
+<link rel="stylesheet" href="/public/styles.css">
+<style>
+  /* Film mode: every motion is driven frame-by-frame from film.js */
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  html, body { margin: 0; background: #07060b; overflow: hidden; min-height: 0; }
+  #stage { position: absolute; left: 0; top: 0; overflow: hidden; background: #07060b; color: var(--text); font-family: var(--sans); }
+  #bg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .abs { position: absolute; }
+  .w { display: inline-block; white-space: pre; }
+  .center { left: 0; right: 0; text-align: center; margin: 0 auto; }
+
+  /* Typography */
+  .t-intro { font: 500 var(--intro-size) / 1.24 var(--serif); color: #fff8ea; }
+  .lang-hi .t-intro { font: 400 calc(var(--intro-size) * .86) / 1.55 'Tiro', var(--serif); }
+  .kicker { font: 600 var(--kick-size) / 1 var(--sans); letter-spacing: .32em; text-transform: uppercase; color: var(--gold-2); }
+  .lang-hi .kicker { font: 400 calc(var(--kick-size) * 1.25) / 1.2 'Tiro', var(--sans); letter-spacing: .08em; }
+  .head { font: 500 var(--head-size) / 1.12 var(--serif); color: #fff8ea; letter-spacing: -.005em; }
+  .lang-hi .head { font: 400 calc(var(--head-size) * .82) / 1.45 'Tiro', var(--serif); }
+  .sub { font: 400 var(--sub-size) / 1.5 var(--sans); color: #cfc6d8; }
+  .lang-hi .sub { font: 400 calc(var(--sub-size) * 1.02) / 1.65 'Tiro', var(--sans); }
+  .speech-label { font: 600 calc(var(--kick-size) * .85) / 1 var(--sans); letter-spacing: .24em; text-transform: uppercase; color: var(--faint); display: flex; align-items: center; gap: 10px; }
+  .lang-hi .speech-label { font: 400 var(--kick-size) / 1.2 'Tiro', var(--sans); letter-spacing: .06em; }
+  .speech-label .live { width: 10px; height: 10px; border-radius: 50%; background: #ff6b55; box-shadow: 0 0 12px #ff6b55; }
+  .speech { font: 400 var(--speech-size) / 1.6 'Tiro', var(--serif); color: var(--gold-2); }
+  .speech-tr { font: italic 400 calc(var(--speech-size) * 1.02) / 1.4 var(--serif); color: #cfc6d8; }
+  .title-deva { font: 400 var(--deva-size) / 1 'Tiro', serif; color: var(--gold-2); letter-spacing: .04em; }
+  .title-main { font: italic 500 var(--title-size) / 1 var(--serif); color: #fff8ea; letter-spacing: .005em; }
+  .title-tag { font: 400 var(--tag-size) / 1.3 var(--serif); color: #e8dccb; }
+  .lang-hi .title-tag { font: 400 calc(var(--tag-size) * .88) / 1.5 'Tiro', var(--serif); }
+  .credit { font: 500 calc(var(--kick-size) * .95) / 1 var(--sans); letter-spacing: .28em; text-transform: uppercase; color: var(--faint); }
+  .lang-hi .credit { font: 400 calc(var(--kick-size) * 1.2) / 1.3 'Tiro', var(--sans); letter-spacing: .04em; }
+
+  /* Big orb + mandala */
+  .bigorb { position: absolute; border-radius: 50%; }
+  .bigorb .orb-body { animation: none !important; }
+  .bigmandala { position: absolute; color: var(--gold-2); overflow: visible; }
+  .bigmandala g { transform-origin: 150px 150px; transform-box: view-box; }
+
+  /* Phone */
+  .phone { position: absolute; border-radius: calc(var(--s) * 60px); padding: calc(var(--s) * 13px);
+    background: linear-gradient(150deg, #3a3444, #16131c 40%, #0d0b12);
+    box-shadow: inset 0 0 0 calc(var(--s) * 1.5px) #4a4356, 0 50px 140px rgba(0, 0, 0, .7), 0 0 180px rgba(240, 150, 70, .10); }
+  .phone-screen { position: relative; overflow: hidden; border-radius: calc(var(--s) * 48px); width: calc(var(--s) * 393px); height: calc(var(--s) * 852px); background: #0d0b14; }
+  .island { position: absolute; z-index: 300; top: calc(var(--s) * 24px); left: 50%; width: calc(var(--s) * 122px); height: calc(var(--s) * 36px); margin-left: calc(var(--s) * -61px); background: #000; border-radius: 99px; }
+  .app-root { --safe-t: 50px; --safe-b: 16px; position: absolute; left: 0; top: 0; width: 393px; height: 852px; transform-origin: 0 0; overflow: hidden; background: var(--bg); font: 400 15px/1.55 var(--sans); color: var(--text); }
+  .statusbar { position: absolute; z-index: 290; top: 0; left: 0; right: 0; height: 50px; display: flex; align-items: center; justify-content: space-between; padding: 6px 34px 0 40px; font: 600 15.5px/1 var(--sans); color: #fff; }
+  .statusbar .icons { display: flex; gap: 6px; align-items: center; }
+  .ph-bg { position: absolute; inset: 0; background: radial-gradient(circle at 15% 0%, rgba(92, 61, 140, .5), transparent 55%), radial-gradient(circle at 100% 45%, rgba(232, 140, 62, .16), transparent 50%), radial-gradient(ellipse at 50% 112%, rgba(255, 196, 120, .2), transparent 55%), var(--bg); }
+  .ph-motes { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .scr { position: absolute; inset: 0; }
+  .ph-main { position: relative; padding: 4px 18px 0; }
+  .app-root .topbar { position: relative; }
+  .app-root .orb-stage { width: 300px; height: 300px; margin-top: 8px; }
+  .app-root .prompt { font-size: 33px; }
+  .app-root .speak-hero { margin-top: 14px; }
+  .app-root .orb { transform: none; }
+  .tap { position: absolute; z-index: 280; width: 64px; height: 64px; margin: -32px 0 0 -32px; border-radius: 50%; background: rgba(255, 255, 255, .28); border: 2px solid rgba(255, 255, 255, .7); pointer-events: none; opacity: 0; }
+  .stack { display: grid; }
+  .stack > * { grid-area: 1 / 1; }
+
+  /* Revelation inside the phone */
+  .rv { position: absolute; inset: 0; z-index: 120; background: radial-gradient(circle at 50% 40%, rgba(60, 40, 70, .6), rgba(9, 7, 14, .98) 64%); }
+  .rv canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .rv .reveal-inner { padding: 92px 26px 30px; }
+  .rv .reveal-sutra { font-size: 33px; }
+  .rv .reveal-orig { font-size: 19px; }
+  .rv .reveal-minds { margin-top: 26px; }
+  .rv .reveal-actions { margin-top: 26px; }
+  .rv .mind-chip { font-size: 12.5px; }
+
+  /* Detail sheet inside the phone */
+  .app-root .sheet { max-height: none; height: 800px; z-index: 150; }
+  .app-root .sheet-body { overflow: hidden; height: 760px; }
+  .app-root .constellation .thread { stroke-dasharray: 420; }
+
+  /* Search */
+  .sb-input { flex: 1; min-width: 0; display: flex; justify-content: flex-end; align-items: center; font-size: 16px; padding: 10px 0; white-space: nowrap; overflow: hidden; color: var(--text); }
+  .sb-input.short { justify-content: flex-start; }
+  .lang-hi .sb-input { font-family: 'Tiro', var(--sans); font-size: 16.5px; }
+  .caret { display: inline-block; width: 2px; height: 20px; margin-left: 1px; vertical-align: -4px; background: var(--gold); }
+  .app-root .answer-text { font-size: 19px; }
+  .lang-hi .app-root .answer-text { font-family: 'Tiro', var(--serif); font-size: 17px; line-height: 1.65; }
+
+  /* Book inside phone */
+  .app-root .cover { max-width: 330px; }
+  .app-root .cover-title { font-size: 31px; }
+
+  /* Constellation (hero, full stage) */
+  #cst text { font-family: var(--serif); }
+  .cst-name { font: 600 var(--cst-name) / 1 var(--serif); fill: #fff3dc; }
+  .lang-hi .cst-name { font: 400 calc(var(--cst-name) * .9) / 1 'Tiro', var(--serif); }
+  .cst-year { font: 500 var(--cst-year) / 1 var(--sans); fill: #c3b9cf; letter-spacing: .08em; }
+  .lang-hi .cst-year { font-family: 'Tiro', var(--sans); letter-spacing: 0; }
+  .cst-tick { font: 500 calc(var(--cst-year) * .8) / 1 var(--sans); fill: #857c92; letter-spacing: .12em; }
+  .cst-you { font: italic 600 calc(var(--cst-name) * 1.15) / 1 var(--serif); fill: #f6d491; }
+  .lang-hi .cst-you { font: 400 calc(var(--cst-name) * 1.05) / 1 'Tiro', var(--serif); }
+</style>
+</head>
+<body>
+<div id="stage"><canvas id="bg"></canvas></div>
+<script src="film.js"></script>
+</body>
+</html>

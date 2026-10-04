@@ -1,0 +1,11 @@
+{
+  "name": "vichaar",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Speak a thought in any language. Keep it forever, see who said it before you, and grow your own book of wisdom.",
+  "scripts": {
+    "dev": "npx wrangler pages dev",
+    "mock": "node dev/server.js"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "Vichaar — Your Book of Thoughts",
+  "short_name": "Vichaar",
+  "description": "Speak a thought in any language. Keep it forever, see who said it before you, and grow your own book of wisdom.",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0d0b14",
+  "theme_color": "#0d0b14",
+  "categories": ["lifestyle", "productivity", "books"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Record a thought", "short_name": "Record", "url": "./?action=record", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Search my thoughts", "short_name": "Search", "url": "./?view=search", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] }
+  ]
+}

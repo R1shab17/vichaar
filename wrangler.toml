@@ -1,0 +1,19 @@
+# Cloudflare Pages config for Vichaar — the source of truth for this project's bindings.
+# Deploys: every push to `main` on GitHub (R1shab17/vichaar) builds and deploys automatically.
+#
+# Optional secrets (dashboard → vichaar → Settings → Variables and secrets, never in this file):
+#   ANTHROPIC_API_KEY   switch the thinking from free Gemma 4 to Claude
+#   ACCESS_CODE         lock the API to people who know the code
+
+name = "vichaar"
+pages_build_output_dir = "./public"
+compatibility_date = "2025-10-01"
+
+# Workers AI – speech-to-text (Whisper), multilingual search vectors (bge-m3)
+# and the free thinking model (Gemma 4) when no Claude key is set
+[ai]
+binding = "AI"
+
+[vars]
+# Claude model used only when ANTHROPIC_API_KEY is set
+CLAUDE_MODEL = "claude-sonnet-5-5"
